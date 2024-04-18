@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     getUser() {
-      axios.get('/user.php/' + localStorage.getItem('token'))
+      axios.post('/user', {token: localStorage.getItem('token')})
           .then((response) => {
             this.user = response.data;
           })
@@ -80,7 +80,7 @@ export default {
     logout() {
       localStorage.removeItem('token');
       this.$router.push('/');
-      axios.post('/logout.php', {}, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
+      axios.post('/logout', {}, { headers: { Authorization: 'Bearer ' + localStorage.getItem('token') } })
           .then((response) => {
             // Handle logout response if needed
           })
@@ -90,7 +90,7 @@ export default {
     },
 
     getOrder(orderId) {
-      axios.get(`/get_order.php?id=${orderId}`)
+      axios.post('/order',{id: orderId})
           .then((response) => {
             // Handle successful response
             this.order = response.data;
@@ -102,7 +102,7 @@ export default {
     },
 
     updateOrder() {
-      axios.post('/update_order.php', this.order)
+      axios.post('/order/update', this.order)
           .then((response) => {
             console.log('Order updated successfully:', response.data);
             this.$router.push('/dashboard');

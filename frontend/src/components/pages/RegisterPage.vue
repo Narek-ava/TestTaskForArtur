@@ -125,7 +125,7 @@ export default {
         password: this.password,
         password_confirmation: this.confirmPassword,
       }
-      axios.post('/register.php', payload)
+      axios.post('/register', payload)
           .then(response => {
             console.log(response,'///////////////////');
             localStorage.setItem('token', response.data.token)

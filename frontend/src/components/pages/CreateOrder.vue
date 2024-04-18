@@ -72,20 +72,20 @@ export default {
     }
   },
   methods: {
-    getUser() {
-      axios.get('/user.php/' + localStorage.getItem('token'))
-          .then((response) => {
-            this.user = response.data;
-          })
-          .catch((error) => {
-            console.error('Error fetching user:', error);
-          });
+    getUser(){
+        axios.post('/user', {token: localStorage.getItem('token')})
+            .then((response) => {
+              this.user = response.data;
+            })
+            .catch((error) => {
+              console.error('Error fetching user:', error);
+            });
     },
 
     logoutAction() {
       this.$router.push('/');
       localStorage.setItem('token', '');
-      axios.post('/logout.php', {}, {headers: {Authorization: 'Bearer ' + localStorage.getItem('token')}})
+      axios.post('/logout', {}, {headers: {Authorization: 'Bearer ' + localStorage.getItem('token')}})
           .then((r) => {
             return r;
           })
@@ -96,13 +96,13 @@ export default {
 
     createOrder() {
         const payload = {
-          user_id: this.$data.user.ID, // Assuming user ID is needed to create an order
+          token: localStorage.getItem('token'),
           customer: this.customer,
-          detail: this.detail, // Convert textarea value to array
+          detail: this.detail,
           status: this.status,
         };
 
-      axios.post('/create_order.php', payload)
+      axios.post('/order/create', payload)
           .then((response) => {
             console.log('Order created successfully:', response.data);
             this.$router.push('/dashboard');

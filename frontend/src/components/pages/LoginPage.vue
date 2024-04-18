@@ -82,7 +82,7 @@ export default {
         email: this.email,
         password: this.password,
       }
-      axios.post('/login.php', payload)
+      axios.post('/login', payload)
           .then(response => {
             localStorage.setItem('token', response.data.token)
             this.$router.push('/dashboard')

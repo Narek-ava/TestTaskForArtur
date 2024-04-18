@@ -5,7 +5,7 @@
 # Run Sql Scrypt
  users.php file
 # Run
- php -S localhost:8000
+ php -S localhost:8000 index.php
  
 # Frontend
 npm i

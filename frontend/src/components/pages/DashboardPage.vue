@@ -27,7 +27,7 @@
           <th>Actions</th>
         </tr>
         </thead>
-        <tbody  v-if="orders.length" >
+        <tbody v-if="orders.length">
         <tr v-for="(order, index) in orders" :key="index">
           <td>{{ order.ID }}</td>
           <td>{{ order.detail }}</td>
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     getUser() {
-      axios.get('/user.php/' + localStorage.getItem('token'))
+      axios.post('/user', {token: localStorage.getItem('token')})
           .then((response) => {
             this.user = response.data;
           })
@@ -83,13 +83,13 @@ export default {
     },
 
     getOrders() {
-      axios.get('/get_orders.php/' + localStorage.getItem('token')) // Assuming this endpoint retrieves all orders
+      axios.post('/orders', {token: localStorage.getItem('token')})
           .then((response) => {
-              if (response.data === 'No orders found[]'){
-                this.orders = [];
-              }else {
-                this.orders = response.data; // Update orders with the fetched data
-              }
+            if (response.data === 'No orders found[]') {
+              this.orders = [];
+            } else {
+              this.orders = response.data;
+            }
           })
           .catch((error) => {
             console.error('Error fetching orders:', error);
@@ -97,9 +97,8 @@ export default {
     },
 
     deleteOrder(orderId) {
-      axios.post('/delete_order.php', { order_id: orderId })
+      axios.post('/order/delete', {order_id: orderId})
           .then((response) => {
-            // Refresh orders after deletion
             this.getOrders();
             console.log('Order deleted successfully');
           })
@@ -108,14 +107,13 @@ export default {
           });
     },
     redirectToUpdate(orderId) {
-      // Redirect to update page passing order ID as parameter
       this.$router.push(`/update/order/${orderId}`);
     },
 
     logoutAction() {
       this.$router.push('/');
       localStorage.setItem('token', "");
-      axios.post('/logout.php', {}, {headers: {Authorization: 'Bearer ' + localStorage.getItem('token')}})
+      axios.post('/logout', {}, {headers: {Authorization: 'Bearer ' + localStorage.getItem('token')}})
           .then((response) => {
             // Handle logout response if needed
           })
