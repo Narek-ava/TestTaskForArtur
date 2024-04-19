@@ -26,9 +26,7 @@ class UserService
         $sql = "INSERT INTO users (username, password, email, token) VALUES ('$username','$password','$email','$token')";
 
         if ($this->conn->query($sql) === TRUE) {
-            return [
-                'token' => $token
-            ];
+            return json_encode($sql);
         } else {
             return [
                 'error' => "Error: " . $sql . "<br>" . $this->conn->error

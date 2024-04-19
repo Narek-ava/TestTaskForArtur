@@ -92,7 +92,6 @@ export default {
     getOrder(orderId) {
       axios.post('/order',{id: orderId})
           .then((response) => {
-            // Handle successful response
             this.order = response.data;
           })
           .catch((error) => {
@@ -102,6 +101,7 @@ export default {
     },
 
     updateOrder() {
+      this.order.user_id = this.user.id
       axios.post('/order/update', this.order)
           .then((response) => {
             console.log('Order updated successfully:', response.data);

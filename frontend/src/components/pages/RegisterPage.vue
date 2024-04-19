@@ -127,8 +127,7 @@ export default {
       }
       axios.post('/register', payload)
           .then(response => {
-            console.log(response,'///////////////////');
-            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('token',response.data.token)
             this.$router.push('/dashboard')
             return response
           })
