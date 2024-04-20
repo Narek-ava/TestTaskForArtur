@@ -1,61 +1,70 @@
 <?php
-include('Controllers/Controller.php');
-include('Services/UserServices/UserService.php');
-include('Services/CRMServices/CRMServices.php');
+include('Controllers/Controller.php'); // Подключение базового контроллера
+include('Services/UserServices/UserService.php'); // Подключение сервиса пользователей
+include('Services/CRMServices/CRMServices.php'); // Подключение сервиса для работы с заказами
 
 class OrdersController
 {
+    // Конструктор класса
     public function __construct()
     {
         global $db;
-        $this->db = $db;
+        $this->db = $db; // Инициализация объекта базы данных
     }
+
+    // Метод для обработки запроса на получение списка заказов пользователя
     public function getListAction(){
-        $request = json_decode(file_get_contents('php://input'), true);//todo  перенести в отдельный класс request
-        $__token = $request['token'];
-        $orders = new CRMServices( $this->db->getConnection());
+        $request = json_decode(file_get_contents('php://input'), true); // Получение данных запроса
+        $__token = $request['token']; // Токен пользователя
 
-        return $orders->getUserOrders($__token);
+        $orders = new CRMServices( $this->db->getConnection()); // Создание объекта CRMServices
+
+        return $orders->getUserOrders($__token); // Вызов метода для получения списка заказов пользователя
     }
 
+    // Метод для обработки запроса на получение информации о заказе
     public function getOrderAction(){
-        $request = json_decode(file_get_contents('php://input'), true);//todo  перенести в отдельный класс request
-        $__id = $request['id'];
-        $order = new CRMServices( $this->db->getConnection());
+        $request = json_decode(file_get_contents('php://input'), true); // Получение данных запроса
+        $__id = $request['id']; // ID заказа
 
-        return $order->getOrder($__id);
+        $order = new CRMServices( $this->db->getConnection()); // Создание объекта CRMServices
+
+        return $order->getOrder($__id); // Вызов метода для получения информации о заказе
     }
 
+    // Метод для обновления информации о заказе
     public function updateAction()
     {
-        $request = json_decode(file_get_contents("php://input"), true);
-        $order_id = $request['ID'];
-        $detail = $request['detail'];
-        $status = $request['status'];
+        $request = json_decode(file_get_contents("php://input"), true); // Получение данных запроса
+        $order_id = $request['ID']; // ID заказа
+        $detail = $request['detail']; // Детали заказа
+        $status = $request['status']; // Статус заказа
 
-        $order = new CRMServices( $this->db->getConnection());
+        $order = new CRMServices( $this->db->getConnection()); // Создание объекта CRMServices
 
-        return $order->updateOrder($detail, $status, $order_id);
+        return $order->updateOrder($detail, $status, $order_id); // Вызов метода для обновления информации о заказе
     }
 
+    // Метод для удаления заказа
     public function deleteAction(){
-        $request = json_decode(file_get_contents("php://input"), true);
-        $order_id = $request['order_id'];
+        $request = json_decode(file_get_contents("php://input"), true); // Получение данных запроса
+        $order_id = $request['order_id']; // ID заказа
 
-        $order = new CRMServices( $this->db->getConnection());
+        $order = new CRMServices( $this->db->getConnection()); // Создание объекта CRMServices
 
-        return $order->deleteOrder($order_id);
+        return $order->deleteOrder($order_id); // Вызов метода для удаления заказа
     }
 
+    // Метод для создания нового заказа
     public function createAction()
     {
-        $request = json_decode(file_get_contents('php://input'), true);
-        $detail = $request['detail'];
-        $status = $request['status'];
-        $token = $request['token'];
+        $request = json_decode(file_get_contents('php://input'), true); // Получение данных запроса
+        $detail = $request['detail']; // Детали заказа
+        $status = $request['status']; // Статус заказа
+        $token = $request['token']; // Токен пользователя
 
-        $order = new CRMServices( $this->db->getConnection());
+        $order = new CRMServices( $this->db->getConnection()); // Создание объекта CRMServices
 
-        return $order->createOrder( $detail, $status,$token);
+        return $order->createOrder( $detail, $status,$token); // Вызов метода для создания нового заказа
     }
 }

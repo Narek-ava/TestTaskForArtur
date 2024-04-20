@@ -1,6 +1,6 @@
 <?php
-include('Services/UserServices/UserService.php');
-include('Controllers/Controller.php');
+include('Services/UserServices/UserService.php'); // Подключение класса UserService
+include('Controllers/Controller.php'); // Подключение базового контроллера
 
 class UserController
 {
@@ -8,50 +8,50 @@ class UserController
     public function __construct()
     {
         global $db;
-        $this->db = $db;
+        $this->db = $db; // Инициализация объекта базы данных
     }
 
+    // Метод для обработки запроса на регистрацию пользователя
     public function registerAction()
     {
-        $request = json_decode(file_get_contents('php://input'), true);//todo  перенести в отдельный класс request
-        $__userName = $request['name'];
-        $__password = $request['password'];
-        $__email = $request['email'];
+        $request = json_decode(file_get_contents('php://input'), true); // Получение данных запроса
+        $__userName = $request['name']; // Имя пользователя
+        $__password = $request['password']; // Пароль пользователя
+        $__email = $request['email']; // Email пользователя
 
+        $user = new UserService($this->db->getConnection()); // Создание объекта UserService
 
-        $user = new UserService($this->db->getConnection());
-
-        return $user->register($__userName, $__password , $__email);
+        return $user->register($__userName, $__password , $__email); // Вызов метода регистрации пользователя
     }
 
+    // Метод для обработки запроса на вход пользователя
     public function loginAction()
     {
-        $request = json_decode(file_get_contents('php://input'), true);//todo  перенести в отдельный класс request
-        $__password = $request['password'];
-        $__email = $request['email'];
+        $request = json_decode(file_get_contents('php://input'), true); // Получение данных запроса
+        $__password = $request['password']; // Пароль пользователя
+        $__email = $request['email']; // Email пользователя
 
-        $user = new UserService($this->db->getConnection());
+        $user = new UserService($this->db->getConnection()); // Создание объекта UserService
 
-        $user->login($__email,$__password);
+        $user->login($__email,$__password); // Вызов метода входа пользователя
     }
 
-    public function logoutAction(){
+    // Метод для обработки запроса на выход пользователя
+    public function logoutAction()
+    {
+        $user = new UserService($this->db->getConnection()); // Создание объекта UserService
 
-        $user = new UserService($this->db->getConnection());
-
-        $user->logout();
-
+        $user->logout(); // Вызов метода выхода пользователя
     }
 
+    // Метод для получения данных авторизованного пользователя
     public function getAuthUserAction()
     {
-        $request = json_decode(file_get_contents('php://input'), true);//todo  перенести в отдельный класс request
-        $__token = $request['token'];
+        $request = json_decode(file_get_contents('php://input'), true); // Получение данных запроса
+        $__token = $request['token']; // Токен пользователя
 
-        $user = new UserService($this->db->getConnection());
+        $user = new UserService($this->db->getConnection()); // Создание объекта UserService
 
-        return $user->getAuthUser($__token);
+        return $user->getAuthUser($__token); // Вызов метода получения данных авторизованного пользователя
     }
-
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 class CRMServices
 {
     private $conn;
@@ -10,6 +9,7 @@ class CRMServices
         $this->conn = $conn;
     }
 
+    // Получение пользователя по токену
     public function getUserByToken($token)
     {
 
@@ -27,6 +27,7 @@ class CRMServices
         }
     }
 
+    // Получение заказов пользователя
     public function getUserOrders($token)
     {
 
@@ -43,7 +44,7 @@ class CRMServices
                 $orders[] = $row;
             }
         } else {
-            echo "No orders found";
+            echo "Заказы не найдены";
         }
 
         $this->conn->close();
@@ -52,6 +53,7 @@ class CRMServices
         echo json_encode($orders);
     }
 
+    // Получение заказа по ID
     public function getOrder($id)
     {
         if ($id) {
@@ -67,17 +69,18 @@ class CRMServices
                 echo json_encode($order);
             } else {
                 http_response_code(404);
-                echo json_encode(array("message" => "Order not found."));
+                echo json_encode(array("message" => "Заказ не найден."));
             }
         } else {
             http_response_code(400);
-            echo json_encode(array("message" => "Order ID not provided."));
+            echo json_encode(array("message" => "ID заказа не предоставлен."));
         }
 
         $this->conn->close();
 
     }
 
+    // Обновление информации о заказе
     public function updateOrder($detail, $status, $order_id)
     {
 
@@ -89,12 +92,13 @@ class CRMServices
             http_response_code(200);
             exit();
         } else {
-            echo "Error: " . $stmt->error;
+            echo "Ошибка: " . $stmt->error;
         }
 
         $this->conn->close();
     }
 
+    // Удаление заказа
     public function deleteOrder($order_id)
     {
 
@@ -104,12 +108,13 @@ class CRMServices
             http_response_code(200);
             exit();
         } else {
-            echo "Error: " . $sql . "<br>" . $this->conn->error;
+            echo "Ошибка: " . $sql . "<br>" . $this->conn->error;
         }
 
         $this->conn->close();
     }
 
+    // Создание нового заказа
     public function createOrder($detail, $status, $token)
     {
         $user_id = json_decode($this->getUserByToken($token), true)['ID'];
@@ -123,7 +128,7 @@ class CRMServices
             exit();
 
         } else {
-            echo "Error: " . $sql . "<br>" . $this->conn->error;
+            echo "Ошибка: " . $sql . "<br>" . $this->conn->error;
         }
 
         $this->conn->close();
